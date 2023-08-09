@@ -15,6 +15,7 @@ import us.timinc.mc.cobblemon.counter.store.KoStreak
 import java.util.*
 
 object Counter : ModInitializer {
+    @Suppress("unused")
     const val MOD_ID = "cobbled_counter"
 
     override fun onInitialize() {
@@ -67,21 +68,25 @@ object Counter : ModInitializer {
             }
     }
 
+    @Suppress("unused")
     fun getPlayerKoStreak(player: Player, species: String): Int {
         val data = Cobblemon.playerData.get(player)
         return (data.extraData.getOrPut(KoStreak.NAME) { KoStreak() } as KoStreak).get(species)
     }
 
+    @Suppress("unused")
     fun getPlayerKoCount(player: Player, species: String): Int {
         val data = Cobblemon.playerData.get(player)
         return (data.extraData.getOrPut(KoCount.NAME) { KoCount() } as KoCount).get(species)
     }
 
+    @Suppress("unused")
     fun getPlayerCaptureStreak(player: Player, species: String): Int {
         val data = Cobblemon.playerData.get(player)
         return (data.extraData.getOrPut(CaptureStreak.NAME) { CaptureStreak() } as CaptureStreak).get(species)
     }
 
+    @Suppress("unused")
     fun getPlayerCaptureCount(player: Player, species: String): Int {
         val data = Cobblemon.playerData.get(player)
         return (data.extraData.getOrPut(CaptureCount.NAME) { CaptureCount() } as CaptureCount).get(species)
