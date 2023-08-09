@@ -7,6 +7,7 @@ import com.cobblemon.mod.common.api.events.pokemon.PokemonCapturedEvent
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtensionRegistry
 import com.cobblemon.mod.common.util.getPlayer
 import net.fabricmc.api.ModInitializer
+import net.minecraft.world.entity.player.Player
 import us.timinc.mc.cobblemon.counter.store.CaptureCount
 import us.timinc.mc.cobblemon.counter.store.CaptureStreak
 import us.timinc.mc.cobblemon.counter.store.KoCount
@@ -64,5 +65,25 @@ object Counter : ModInitializer {
 
                 Cobblemon.playerData.saveSingle(data)
             }
+    }
+
+    fun getPlayerKoStreak(player: Player, species: String): Int {
+        val data = Cobblemon.playerData.get(player)
+        return (data.extraData.getOrPut(KoStreak.NAME) { KoStreak() } as KoStreak).get(species)
+    }
+
+    fun getPlayerKoCount(player: Player, species: String): Int {
+        val data = Cobblemon.playerData.get(player)
+        return (data.extraData.getOrPut(KoCount.NAME) { KoCount() } as KoCount).get(species)
+    }
+
+    fun getPlayerCaptureStreak(player: Player, species: String): Int {
+        val data = Cobblemon.playerData.get(player)
+        return (data.extraData.getOrPut(CaptureStreak.NAME) { CaptureStreak() } as CaptureStreak).get(species)
+    }
+
+    fun getPlayerCaptureCount(player: Player, species: String): Int {
+        val data = Cobblemon.playerData.get(player)
+        return (data.extraData.getOrPut(CaptureCount.NAME) { CaptureCount() } as CaptureCount).get(species)
     }
 }
