@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "cobblemon_counter",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "name": "Cobblemon Counter",
   "description": "Counts things in Cobblemon",
   "authors": [
