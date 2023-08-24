@@ -101,7 +101,7 @@ object Counter : ModInitializer {
         val streakData = getPlayerCaptureStreak(player)
         val species = streakData.first
         val score = streakData.second
-        ctx.source.sendSystemMessage(Component.translatable("counter.ko.streak", score, species))
+        ctx.source.sendSystemMessage(Component.translatable("counter.capture.streak", score, species))
         return Command.SINGLE_SUCCESS
     }
 
