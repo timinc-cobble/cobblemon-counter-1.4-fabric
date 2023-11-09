@@ -120,7 +120,7 @@ object Counter : ModInitializer {
             data.extraData.getOrPut(CaptureStreak.NAME) { CaptureStreak() } as CaptureStreak
         captureStreak.add(species)
 
-        info("Player ${event.player.displayName.string} captured a $species")
+        info("Player ${event.player.displayName.string} captured a $species streak(${captureStreak.count}) count(${captureCount.get(species)})")
 
         Cobblemon.playerData.saveSingle(data)
     }
@@ -141,7 +141,7 @@ object Counter : ModInitializer {
             koCount.add(species)
             koStreak.add(species)
 
-            info("Player ${player.displayName.string} KO'd a $species")
+            info("Player ${player.displayName.string} KO'd a $species streak(${koStreak.count}) count(${koCount.get(species)})")
 
             Cobblemon.playerData.saveSingle(data)
         }
