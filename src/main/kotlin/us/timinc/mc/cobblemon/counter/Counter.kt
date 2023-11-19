@@ -3,7 +3,9 @@ package us.timinc.mc.cobblemon.counter
 import com.cobblemon.mod.common.Cobblemon
 import com.cobblemon.mod.common.api.events.CobblemonEvents
 import com.cobblemon.mod.common.api.events.battles.BattleFaintedEvent
+import com.cobblemon.mod.common.api.events.pokeball.PokemonCatchRateEvent
 import com.cobblemon.mod.common.api.events.pokemon.PokemonCapturedEvent
+import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtensionRegistry
 import com.cobblemon.mod.common.util.getPlayer
 import com.mojang.brigadier.Command
@@ -12,24 +14,26 @@ import com.mojang.brigadier.context.CommandContext
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.server.command.CommandManager.argument
+import net.minecraft.server.command.CommandManager.literal
+import net.minecraft.server.command.ServerCommandSource
+import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.Text
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
+import us.timinc.mc.cobblemon.counter.config.CounterConfig
 import us.timinc.mc.cobblemon.counter.store.CaptureCount
 import us.timinc.mc.cobblemon.counter.store.CaptureStreak
 import us.timinc.mc.cobblemon.counter.store.KoCount
 import us.timinc.mc.cobblemon.counter.store.KoStreak
 import java.util.*
-import net.minecraft.server.command.CommandManager.*
-import net.minecraft.server.command.ServerCommandSource
-import net.minecraft.text.Text
-import org.apache.logging.log4j.LogManager
-import org.apache.logging.log4j.Logger
-import us.timinc.mc.cobblemon.counter.config.CounterConfig
 
 object Counter : ModInitializer {
     @Suppress("unused")
     const val MOD_ID = "cobbled_counter"
 
     private var logger: Logger = LogManager.getLogger(MOD_ID)
-    private var config : CounterConfig = CounterConfig.Builder.load()
+    private var config: CounterConfig = CounterConfig.Builder.load()
 
     override fun onInitialize() {
         PlayerDataExtensionRegistry.register(KoCount.NAME, KoCount::class.java)
@@ -39,38 +43,38 @@ object Counter : ModInitializer {
 
         CobblemonEvents.POKEMON_CAPTURED.subscribe { handlePokemonCapture(it) }
         CobblemonEvents.BATTLE_FAINTED.subscribe { handleWildDefeat(it) }
+        CobblemonEvents.POKEMON_CATCH_RATE.subscribe { repeatBallBooster(it) }
         CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
             dispatcher.register(
-                literal("counter")
-                    .then(
-                        literal("ko")
-                            .then(
-                                literal("count")
-                                    .then(
-                                        argument("species", StringArgumentType.greedyString())
-                                            .executes { checkKoCount(it) }
-                                    )
-                            )
-                            .then(
-                                literal("streak")
-                                    .executes { checkKoStreak(it) }
-                            )
-                    )
-                    .then(
-                        literal("capture")
-                            .then(
-                                literal("count")
-                                    .then(
-                                        argument("species", StringArgumentType.greedyString())
-                                            .executes { checkCaptureCount(it) }
-                                    )
-                            )
-                            .then(
-                                literal("streak")
-                                    .executes { checkCaptureStreak(it) }
-                            )
+                literal("counter").then(literal("ko").then(
+                    literal("count").then(argument(
+                        "species", StringArgumentType.greedyString()
+                    ).executes {
+                        checkKoCount(
+                            it
+                        )
+                    })
+                ).then(literal("streak").executes { checkKoStreak(it) })
+                ).then(literal("capture").then(
+                        literal("count").then(argument(
+                            "species", StringArgumentType.greedyString()
+                        ).executes { checkCaptureCount(it) })
+                    ).then(literal("streak").executes { checkCaptureStreak(it) })
                     )
             )
+        }
+    }
+
+    private fun repeatBallBooster(event: PokemonCatchRateEvent) {
+        val thrower = event.thrower
+
+        if (thrower !is ServerPlayerEntity) return
+
+        if (event.pokeBallEntity.pokeBall == PokeBalls.REPEAT_BALL && getPlayerCaptureCount(
+                thrower, event.pokemonEntity.pokemon.species.name.lowercase()
+            ) > 0
+        ) {
+            event.catchRate *= 2.5f
         }
     }
 
@@ -120,7 +124,13 @@ object Counter : ModInitializer {
             data.extraData.getOrPut(CaptureStreak.NAME) { CaptureStreak() } as CaptureStreak
         captureStreak.add(species)
 
-        info("Player ${event.player.displayName.string} captured a $species streak(${captureStreak.count}) count(${captureCount.get(species)})")
+        info(
+            "Player ${event.player.displayName.string} captured a $species streak(${captureStreak.count}) count(${
+                captureCount.get(
+                    species
+                )
+            })"
+        )
 
         Cobblemon.playerData.saveSingle(data)
     }
@@ -141,7 +151,13 @@ object Counter : ModInitializer {
             koCount.add(species)
             koStreak.add(species)
 
-            info("Player ${player.displayName.string} KO'd a $species streak(${koStreak.count}) count(${koCount.get(species)})")
+            info(
+                "Player ${player.displayName.string} KO'd a $species streak(${koStreak.count}) count(${
+                    koCount.get(
+                        species
+                    )
+                })"
+            )
 
             Cobblemon.playerData.saveSingle(data)
         }
