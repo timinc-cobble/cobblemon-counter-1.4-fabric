@@ -15,12 +15,15 @@ class KoCount : PlayerDataExtension {
     }
 
     fun add(speciesName: String) {
-        koCounts[speciesName] =
-            get(speciesName) + 1
+        koCounts[speciesName] = get(speciesName) + 1
     }
 
     fun get(speciesName: String): Int {
         return koCounts.getOrDefault(speciesName, 0)
+    }
+
+    fun total(): Int {
+        return koCounts.values.reduce { acc, i -> acc + i }
     }
 
     override fun deserialize(json: JsonObject): KoCount {

@@ -7,7 +7,7 @@ import java.io.FileReader
 import java.io.PrintWriter
 
 class CounterConfig {
-    val debug = false;
+    val debug = false
 
     class Builder {
         companion object {
