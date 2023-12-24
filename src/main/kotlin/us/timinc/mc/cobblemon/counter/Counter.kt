@@ -76,7 +76,7 @@ object Counter : ModInitializer {
                     literal("capture").then(
                         literal("count")
                             .then(
-                                argument("species", StringArgumentType.greedyString())
+                                argument("species", PokemonArgumentType.pokemon())
                                     .then(
                                         argument("player", EntityArgumentType.player())
                                             .executes { CaptureCountCommand.withPlayer(it) }
