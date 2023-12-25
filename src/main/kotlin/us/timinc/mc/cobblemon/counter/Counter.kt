@@ -71,6 +71,29 @@ object Counter : ModInitializer {
                                     .executes { KoTotalCommand.withPlayer(it) }
                             )
                             .executes { KoTotalCommand.withoutPlayer(it) }
+                    ).then(
+                        literal("reset")
+                            .requires { source -> source.hasPermissionLevel(2) }
+                            .then(
+                                literal("count")
+                                    .then(
+                                        argument("player", EntityArgumentType.player())
+                                            .executes { KoResetCommand.resetCount(it) }
+                                    )
+                            )
+                            .then(
+                                literal("streak")
+                                    .then(
+                                        argument("player", EntityArgumentType.player())
+                                            .executes { KoResetCommand.resetStreak(it) }
+                                    )
+                            )
+                            .then(
+                                literal("all").then(
+                                    argument("player", EntityArgumentType.player())
+                                        .executes { KoResetCommand.reset(it) }
+                                )
+                            )
                     )
                 ).then(
                     literal("capture").then(
@@ -97,6 +120,29 @@ object Counter : ModInitializer {
                                     .executes { CaptureTotalCommand.withPlayer(it) }
                             )
                             .executes { CaptureTotalCommand.withoutPlayer(it) }
+                    ).then(
+                        literal("reset")
+                            .requires { source -> source.hasPermissionLevel(2) }
+                            .then(
+                                literal("count")
+                                    .then(
+                                        argument("player", EntityArgumentType.player())
+                                            .executes { CaptureResetCommand.resetCount(it) }
+                                    )
+                            )
+                            .then(
+                                literal("streak")
+                                    .then(
+                                        argument("player", EntityArgumentType.player())
+                                            .executes { CaptureResetCommand.resetStreak(it) }
+                                    )
+                            )
+                            .then(
+                                literal("all").then(
+                                    argument("player", EntityArgumentType.player())
+                                        .executes { CaptureResetCommand.reset(it) }
+                                )
+                            )
                     )
                 )
             )

@@ -18,7 +18,24 @@ object CaptureApi {
 
     fun getStreak(player: PlayerEntity): Pair<String, Int> {
         val playerData = Cobblemon.playerData.get(player)
-        val koStreakData = (playerData.extraData.getOrPut(CaptureStreak.NAME) { CaptureStreak() } as CaptureStreak)
-        return Pair(koStreakData.species, koStreakData.count)
+        val captureStreakData = (playerData.extraData.getOrPut(CaptureStreak.NAME) { CaptureStreak() } as CaptureStreak)
+        return Pair(captureStreakData.species, captureStreakData.count)
+    }
+
+    fun resetCount(player: PlayerEntity) {
+        val playerData = Cobblemon.playerData.get(player)
+        val captureCountData = (playerData.extraData.getOrPut(CaptureCount.NAME) { CaptureCount() } as CaptureCount)
+        captureCountData.reset()
+    }
+
+    fun resetStreak(player: PlayerEntity) {
+        val playerData = Cobblemon.playerData.get(player)
+        val captureStreakData = (playerData.extraData.getOrPut(CaptureStreak.NAME) { CaptureStreak() } as CaptureStreak)
+        captureStreakData.reset()
+    }
+
+    fun reset(player: PlayerEntity) {
+        resetCount(player)
+        resetStreak(player)
     }
 }
