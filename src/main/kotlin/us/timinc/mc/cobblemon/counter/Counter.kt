@@ -9,13 +9,13 @@ import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtensionRegistry
 import com.cobblemon.mod.common.command.argument.PokemonArgumentType
 import com.cobblemon.mod.common.util.getPlayer
-import com.mojang.brigadier.arguments.StringArgumentType
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.server.command.CommandManager.argument
 import net.minecraft.server.command.CommandManager.literal
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.Text
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import us.timinc.mc.cobblemon.counter.api.CaptureApi
@@ -181,19 +181,26 @@ object Counter : ModInitializer {
                 )
             })"
         )
+        if (config.broadcastCapturesToPlayer) {
+            event.player.sendMessage(
+                Text.translatable(
+                    "counter.capture.confirm", species, captureCount.get(species), captureStreak.count
+                )
+            )
+        }
 
         Cobblemon.playerData.saveSingle(data)
     }
 
-    private fun handleWildDefeat(battleVictoryEvent: BattleFaintedEvent) {
-        val targetEntity = battleVictoryEvent.killed.entity ?: return
+    private fun handleWildDefeat(event: BattleFaintedEvent) {
+        val targetEntity = event.killed.entity ?: return
         val targetPokemon = targetEntity.pokemon
         if (!targetPokemon.isWild()) {
             return
         }
         val species = targetPokemon.species.name.lowercase()
 
-        battleVictoryEvent.battle.playerUUIDs.mapNotNull(UUID::getPlayer).forEach { player ->
+        event.battle.playerUUIDs.mapNotNull(UUID::getPlayer).forEach { player ->
             val data = Cobblemon.playerData.get(player)
             val koCount: KoCount = data.extraData.getOrPut(KoCount.NAME) { KoCount() } as KoCount
             val koStreak: KoStreak = data.extraData.getOrPut(KoStreak.NAME) { KoStreak() } as KoStreak
@@ -208,6 +215,13 @@ object Counter : ModInitializer {
                     )
                 })"
             )
+            if (config.broadcastKosToPlayer) {
+                player.sendMessage(
+                    Text.translatable(
+                        "counter.ko.confirm", species, koCount.get(species), koStreak.count
+                    )
+                )
+            }
 
             Cobblemon.playerData.saveSingle(data)
         }
