@@ -26,9 +26,17 @@ object KoStreakCommand {
 
     private fun check(ctx: CommandContext<ServerCommandSource>, player: PlayerEntity): Int {
         val streakData = KoApi.getStreak(player)
-        val species = streakData.first
+        val pokemonId = streakData.first
         val count = streakData.second
-        ctx.source.sendMessage(Text.translatable("counter.ko.streak", player.displayName, count, species))
+        ctx.source.sendMessage(
+            Text.translatable(
+                "counter.ko.streak",
+                player.displayName,
+                count,
+                pokemonId.species,
+                pokemonId.form
+            )
+        )
         return count
     }
 }
