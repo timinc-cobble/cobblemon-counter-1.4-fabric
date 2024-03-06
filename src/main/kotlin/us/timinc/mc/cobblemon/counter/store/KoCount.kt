@@ -8,18 +8,18 @@ class KoCount : PlayerDataExtension {
         const val NAME = "koCount"
     }
 
-    private val koCounts = mutableMapOf<String, Int>()
+    private val koCounts = mutableMapOf<PokemonIdentifier, Int>()
 
     fun reset() {
         koCounts.clear()
     }
 
-    fun add(speciesName: String) {
-        koCounts[speciesName] = get(speciesName) + 1
+    fun add(identifier: PokemonIdentifier) {
+        koCounts[identifier] = get(identifier) + 1
     }
 
-    fun get(speciesName: String): Int {
-        return koCounts.getOrDefault(speciesName, 0)
+    fun get(identifier: PokemonIdentifier): Int {
+        return koCounts.getOrDefault(identifier, 0)
     }
 
     fun total(): Int {
@@ -28,8 +28,9 @@ class KoCount : PlayerDataExtension {
 
     override fun deserialize(json: JsonObject): KoCount {
         val defeatsData = json.getAsJsonObject("defeats")
-        for (speciesName in defeatsData.keySet()) {
-            koCounts[speciesName] = defeatsData.get(speciesName).asInt
+        for (jsonKey in defeatsData.keySet()) {
+            val pokemonId = PokemonIdentifier.fromJsonKey(jsonKey)
+            koCounts[pokemonId] = defeatsData.get(jsonKey).asInt
         }
 
         return this
@@ -44,8 +45,9 @@ class KoCount : PlayerDataExtension {
         json.addProperty("name", NAME)
 
         val defeatsData = JsonObject()
-        for (speciesName in koCounts.keys) {
-            defeatsData.addProperty(speciesName, koCounts[speciesName])
+        for (identifier in koCounts.keys) {
+            val key = identifier.jsonKey()
+            defeatsData.addProperty(key, koCounts[identifier])
         }
         json.add("defeats", defeatsData)
 

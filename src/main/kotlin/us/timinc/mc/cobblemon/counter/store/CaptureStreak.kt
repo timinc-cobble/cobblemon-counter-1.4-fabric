@@ -8,32 +8,36 @@ class CaptureStreak : PlayerDataExtension {
         const val NAME = "captureStreak"
     }
 
-    var species = ""
+    var pokemonId = PokemonIdentifier("", "")
     var count = 0
 
     fun reset() {
-        species = ""
+        pokemonId = PokemonIdentifier("", "")
         count = 0
     }
 
-    fun add(speciesName: String) {
-        if (speciesName == species) {
+    fun add(identifier: PokemonIdentifier) {
+        if (identifier == pokemonId) {
             count++
         } else {
-            species = speciesName
+            pokemonId = identifier
             count = 1
         }
     }
 
-    fun get(speciesName: String): Int {
-        if (speciesName == species) {
+    fun get(identifier: PokemonIdentifier): Int {
+        if (identifier == pokemonId) {
             return count
         }
         return 0
     }
 
     override fun deserialize(json: JsonObject): CaptureStreak {
-        species = json.get("species").asString
+        val species = json.get("species").asString
+        val form = if (json.has("form")) {
+            json.get("form").asString
+        } else ""
+        pokemonId = PokemonIdentifier(species, form)
         count = json.get("count").asInt
 
         return this
@@ -47,7 +51,8 @@ class CaptureStreak : PlayerDataExtension {
         val json = JsonObject()
 
         json.addProperty("name", NAME)
-        json.addProperty("species", species)
+        json.addProperty("species", pokemonId.species)
+        json.addProperty("form", pokemonId.form)
         json.addProperty("count", count)
 
         return json

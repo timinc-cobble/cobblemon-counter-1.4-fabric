@@ -1,9 +1,9 @@
 {
-    "counter.ko.count": "%d has ko'd %d %d",
-    "counter.ko.streak": "%d has a ko streak of %d %d",
+    "counter.ko.count": "%d has ko'd %d %d %d",
+    "counter.ko.streak": "%d has a ko streak of %d %d %d",
     "counter.ko.total": "%d has ko'd %d total Pokemon",
-    "counter.capture.count": "%d has captured %d %d",
-    "counter.capture.streak": "%d has a capture streak of %d %d",
+    "counter.capture.count": "%d has captured %d %d %d",
+    "counter.capture.streak": "%d has a capture streak of %d %d %d",
     "counter.capture.total": "%d has captured %d total Pokemon",
     "counter.ko.count.reset": "KO count data reset for %d",
     "counter.ko.streak.reset": "KO streak data reset for %d",
@@ -11,6 +11,6 @@
     "counter.capture.count.reset": "Capture count data reset for %d",
     "counter.capture.streak.reset": "Capture streak data reset for %d",
     "counter.capture.all.reset": "Capture data reset for %d",
-    "counter.capture.confirm": "Captured %d (%d/%d)",
-    "counter.ko.confirm": "KO'd %d (%d/%d)"
+    "counter.capture.confirm": "Captured %d %d (%d/%d)",
+    "counter.ko.confirm": "KO'd %d %d (%d/%d)"
 }

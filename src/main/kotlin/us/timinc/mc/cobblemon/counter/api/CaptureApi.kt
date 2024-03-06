@@ -4,6 +4,7 @@ import com.cobblemon.mod.common.Cobblemon
 import net.minecraft.entity.player.PlayerEntity
 import us.timinc.mc.cobblemon.counter.store.CaptureCount
 import us.timinc.mc.cobblemon.counter.store.CaptureStreak
+import us.timinc.mc.cobblemon.counter.store.PokemonIdentifier
 
 object CaptureApi {
     fun getTotal(player: PlayerEntity): Int {
@@ -11,15 +12,17 @@ object CaptureApi {
         return (playerData.extraData.getOrPut(CaptureCount.NAME) { CaptureCount() } as CaptureCount).total()
     }
 
-    fun getCount(player: PlayerEntity, species: String): Int {
+    fun getCount(player: PlayerEntity, pokemonId: PokemonIdentifier): Int {
         val playerData = Cobblemon.playerData.get(player)
-        return (playerData.extraData.getOrPut(CaptureCount.NAME) { CaptureCount() } as CaptureCount).get(species)
+        return (playerData.extraData.getOrPut(CaptureCount.NAME) { CaptureCount() } as CaptureCount).get(
+            pokemonId
+        )
     }
 
-    fun getStreak(player: PlayerEntity): Pair<String, Int> {
+    fun getStreak(player: PlayerEntity): Pair<PokemonIdentifier, Int> {
         val playerData = Cobblemon.playerData.get(player)
         val captureStreakData = (playerData.extraData.getOrPut(CaptureStreak.NAME) { CaptureStreak() } as CaptureStreak)
-        return Pair(captureStreakData.species, captureStreakData.count)
+        return Pair(captureStreakData.pokemonId, captureStreakData.count)
     }
 
     fun resetCount(player: PlayerEntity) {
