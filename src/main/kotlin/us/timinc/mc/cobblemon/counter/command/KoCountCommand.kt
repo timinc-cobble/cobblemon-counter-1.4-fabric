@@ -1,6 +1,5 @@
 package us.timinc.mc.cobblemon.counter.command
 
-import com.cobblemon.mod.common.command.argument.PokemonArgumentType
 import com.mojang.brigadier.context.CommandContext
 import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.entity.player.PlayerEntity

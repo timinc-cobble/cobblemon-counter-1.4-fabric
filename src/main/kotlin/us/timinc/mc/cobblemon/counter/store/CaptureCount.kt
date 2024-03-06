@@ -2,7 +2,6 @@ package us.timinc.mc.cobblemon.counter.store
 
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtension
 import com.google.gson.JsonObject
-import us.timinc.mc.cobblemon.counter.Counter
 
 class CaptureCount : PlayerDataExtension {
     companion object {

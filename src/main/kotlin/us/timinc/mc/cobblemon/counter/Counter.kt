@@ -7,7 +7,6 @@ import com.cobblemon.mod.common.api.events.pokeball.PokemonCatchRateEvent
 import com.cobblemon.mod.common.api.events.pokemon.PokemonCapturedEvent
 import com.cobblemon.mod.common.api.pokeball.PokeBalls
 import com.cobblemon.mod.common.api.storage.player.PlayerDataExtensionRegistry
-import com.cobblemon.mod.common.command.argument.PokemonArgumentType
 import com.cobblemon.mod.common.command.argument.PokemonPropertiesArgumentType
 import com.cobblemon.mod.common.util.getPlayer
 import net.fabricmc.api.ModInitializer
