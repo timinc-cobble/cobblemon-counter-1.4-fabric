@@ -1,0 +1,16 @@
+{
+"counter.ko.count": "%d가 %d를 %d번 쓰러뜨렸습니다",
+"counter.ko.streak": "%d는 연속으로 %d번 %d를 쓰러뜨린 기록을 가지고 있습니다",
+"counter.ko.total": "%d는 총 %d마리의 포켓몬을 쓰러뜨렸습니다",
+"counter.capture.count": "%d가 %d를 %d번 포획했습니다",
+"counter.capture.streak": "%d는 연속으로 %d번 %d를 포획하는 기록을 가지고 있습니다",
+"counter.capture.total": "%d는 총 %d마리의 포켓몬을 포획했습니다",
+"counter.ko.count.reset": "%d의 KO 횟수 데이터가 초기화되었습니다",
+"counter.ko.streak.reset": "%d의 KO 연속 기록 데이터가 초기화되었습니다",
+"counter.ko.all.reset": "%d의 KO 데이터가 모두 초기화되었습니다",
+"counter.capture.count.reset": "%d의 포획 횟수 데이터가 초기화되었습니다",
+"counter.capture.streak.reset": "%d의 포획 연속 기록 데이터가 초기화되었습니다",
+"counter.capture.all.reset": "%d의 포획 데이터가 모두 초기화되었습니다",
+"counter.capture.confirm": "포획 확인됨 %d (%d/%d)",
+"counter.ko.confirm": "KO 확인됨 %d (%d/%d)"
+}
